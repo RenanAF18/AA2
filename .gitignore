@@ -1,0 +1,6 @@
+# exemplo mínimo
+node_modules/
+*.log
+*.class
+.DS_Store
+.vscode/
