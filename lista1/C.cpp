@@ -3,7 +3,7 @@ using namespace std;
 
 typedef long long ll;
 const int MAXN = 1000005;
-Node tree[4 * MAXN];
+
 string s;
 
 struct Node {
@@ -16,6 +16,7 @@ struct Node {
     Node(ll m, ll o, ll c) : matched(m), open(o), close(c) {}
 };
 
+Node tree[4 * MAXN];
 
 Node merge(Node left, Node right) {
     Node result;

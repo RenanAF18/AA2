@@ -4,3 +4,11 @@ node_modules/
 *.class
 .DS_Store
 .vscode/
+
+# Arquivos do Competitive Programming Helper (CPH)
+.cph/
+*.in
+*.out
+*.txt
+input*
+output*
