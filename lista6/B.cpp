@@ -6,30 +6,34 @@ using namespace std;
 typedef long long ll;
 typedef pair<ll,ll> pii;
 typedef vector<ll> vii;
+typedef tuple<ll, ll, ll> tii;
 
 const ll INF = 1e18;
 const int MAXN = 1e5 + 5;
 const int MAXM = 2 * 1e5;
-vector<pii> graph [MAXN];
-ll dist[MAXN][MAXN];
+const int MAXK = 10;
 
-void typedef vector<pii> vpii;
-typedef pair<ll,ll> pii;
+vector<pii> graph [MAXN];
+ll dist[MAXN][MAXK];
 
 void dijkstra(int start, int n){
-    
-    priority_queue<pair<ll, pii>, vector<pair<ll, pii>>, greater<pair<ll, pii>>> pq;
-    for(ll i=0;i<m;i++) dis[s[i]] = 0, q.insert({0, s[i]});
-    while(!q.empty()){
-        auto& [d, v] = *q.begin();
-        for(auto& [u, w]: g[v]){
-            if(d + w >= dis[u]) continue;
-            q.erase({dis[u], u});
-            dis[u] = d + w;
-            q.insert({dis[u], u});
-        }
-        q.erase(q.begin());
+    priority_queue<tii, vector<tii>, greater<tii>> pq;
+
+    for(int i = 0; i <= n; i++){
+        for(int j = 0; j < 10; j++)
+            dist[i][j] = INF;
     }
+    for(int i = 0; i < 10; i++){
+        dist[start][i] = 0;
+        pq.push({0, start, i});
+    }
+    
+    while(!pq.empty()){
+
+
+    }
+    
+    
 }
 
 int main(){
