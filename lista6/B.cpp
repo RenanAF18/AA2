@@ -20,7 +20,7 @@ void atualizar(int v, ll newDist, int k){
     if(dist[v][k] >= newDist){
         swap(dist[v][k], newDist);
     }
-    for(int i = k; i > 0; i--){
+    for(int i = k -1; i > 0; i--){
         if(dist[v][i] >= dist[v][i-1]){
             swap(dist[v][i], dist[v][i-1]);
         }
@@ -35,7 +35,7 @@ void dijkstra(int start, int n, int k){
         for(int j = 0; j < 10; j++)
             dist[i][j] = INF;
     }
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < k; i++)
         dist[start][i] = 0;
     
     pq.push({0, start});
@@ -47,7 +47,7 @@ void dijkstra(int start, int n, int k){
         u = pq.top().second;
         pq.pop();
 
-        if(d > dist[u][k]) continue;
+        if(d > dist[u][k - 1]) continue;
 
         for(auto edge : graph[u]){
             int v = edge.first;
@@ -75,6 +75,7 @@ int main(){
         cin >> a >> b >> c;
         graph[a].push_back({b, c});
     }
+    dijkstra(1, n, k);
 
     for(int i = 0; i < k; i++)
         cout << dist[n][i] << " ";
