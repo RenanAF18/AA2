@@ -29,7 +29,7 @@ void muda(int id, int l, int r, int posi, long long value) {
         else
             muda(right(id), mid + 1, r, posi, value);
         seg[id] = seg[left(id)] + seg[right(id)];
-    }
+    } 
 }
 
 long long query(int id, int l, int r, int lq, int rq) {
