@@ -64,7 +64,6 @@ int main(){
         string str; cin >> str;
         tr.update(str);
     }
-    return 0;
     while(q--){
         string busca; cin >> busca;
         cout << tr.search(busca) << '\n';

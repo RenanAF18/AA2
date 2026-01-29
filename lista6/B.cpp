@@ -16,16 +16,14 @@ const int MAXK = 10;
 vector<pii> graph [MAXN];
 ll dist[MAXN][MAXK];
 
-void atualizar(int v, ll newDist, int k){
-    if(dist[v][k] >= newDist){
-        swap(dist[v][k], newDist);
-    }
-    for(int i = k -1; i > 0; i--){
-        if(dist[v][i] >= dist[v][i-1]){
-            swap(dist[v][i], dist[v][i-1]);
+int atualizar(int v, ll newDist, int k){
+    for(int i = 0; i <= k; i++){
+        if(dist[v][i] == INF){
+            dist[v][i] = newDist;
+            return 1;
         }
-
     }
+    return -1;
 }
 
 void dijkstra(int start, int n, int k){
@@ -35,8 +33,7 @@ void dijkstra(int start, int n, int k){
         for(int j = 0; j < 10; j++)
             dist[i][j] = INF;
     }
-    for(int i = 0; i < k; i++)
-        dist[start][i] = 0;
+    
     
     pq.push({0, start});
 
@@ -47,21 +44,16 @@ void dijkstra(int start, int n, int k){
         u = pq.top().second;
         pq.pop();
 
-        if(d > dist[u][k - 1]) continue;
-
+        if (atualizar(u, d, k-1) == -1) continue;
+        
         for(auto edge : graph[u]){
             int v = edge.first;
             ll w = edge.second;
 
-            for(int i = 0; i < k; i++){
-                ll newDist = w + dist[u][i];
-                atualizar(v, newDist, k);
-                pq.push({newDist, v});
-            }
+            ll newDist = w + d;
+            pq.push({newDist, v});
         }
-    }
-    
-    
+    }    
 }
 
 int main(){
