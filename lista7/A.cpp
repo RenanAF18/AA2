@@ -22,10 +22,10 @@ struct Node{
 };
 
 struct Trie{
-    Node root
+    Node root;
 
 
-}
+};
 
 int main(){
 
