@@ -4,11 +4,13 @@ typedef long long ll;
 typedef pair<ll,ll> pii;
 struct Node{
 	Node* conex[26];
-	Node(){
+	ll f;
+
+	Node(): f(-1){
 		for(int i = 0; i < 26; i++)
 			conex[i] = nullptr;
 	}
-	Node(int v){
+	Node(ll v): f(v){
 		for(int i = 0; i < 26; i++)
 			conex[i] = nullptr;
 	}
@@ -19,12 +21,15 @@ struct Trie{
 	Trie(): root(new Node()), sz(0){}
 	
 	void add(string s){
-		Node* aux = root;
+		Node* naux = root;
+		ll aux = s.size();
+
 		for(auto c : s){
 			int id = c -'a';
-			if(aux->conex[id] == nullptr)
-				aux->conex[id] = new Node();
-			aux = aux->conex[id];
+			if(naux->conex[id] == nullptr)
+				naux->conex[id] = new Node(aux);
+			naux = naux->conex[id];
+			aux--;
 		}
 	}
 	ll query(string s){
@@ -35,14 +40,17 @@ struct Trie{
 			int id = c - 'a';
 			if(naux->conex[id] == nullptr){
 				if(aux == s.size()) return aux;
-
-				
+				if(aux == 1 && naux->f != 1){
+					if(naux->f >= s.size()) return s.size();
+					else return naux->f;
+				}
 			}
+			aux--;
 		}
 
 
 
-		return 1;
+		return aux;
 	}
 };
 int main(){
