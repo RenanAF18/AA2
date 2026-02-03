@@ -44,10 +44,11 @@ struct Trie{
 					if(naux->f >= s.size()) return s.size();
 					else return naux->f;
 				}
+				if(aux < naux->f) return min((ll)s.size(), (naux->f)*2);
+				if(naux->f == 1 && aux > 1) return aux;
 			}
 			aux--;
 		}
-
 
 
 		return aux;
@@ -60,6 +61,7 @@ int main(){
 	while(n--){
 		string str; cin >> str;
 		cout << tr.query(str) << "\n";
+		tr.add(str);
 	}
 	return 0;
 }
