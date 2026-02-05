@@ -22,32 +22,30 @@ struct Trie{
 	
 	void add(string s){
 		Node* naux = root;
-		ll aux = s.size();
+		ll aux = s.length();
 
 		for(auto c : s){
 			int id = c -'a';
 			if(naux->conex[id] == nullptr)
-				naux->conex[id] = new Node(aux);
+			naux->conex[id] = new Node(aux);
 			naux = naux->conex[id];
 			aux--;
 		}
 	}
 	ll query(string s){
-		ll aux = s.size();
+		ll aux = s.length();
 		Node* naux = root;
 
 		for(auto c : s){
 			int id = c - 'a';
 			if(naux->conex[id] == nullptr){
-				if(aux == s.size()) return aux;
-				if(aux == 1 && naux->f != 1){
-					if(naux->f >= s.size()) return s.size();
-					else return naux->f;
-				}
-				if(aux < naux->f) return min((ll)s.size(), (naux->f)*2);
-				if(naux->f == 1 && aux > 1) return aux;
+				if(aux == s.length()) return aux;
+				if(aux == naux->f) return min((naux->f-1)*2, (ll)s.length());
 			}
+			naux = naux->conex[id];
 			aux--;
+
+			if(aux == 1 && naux->f != 1) return min((ll)s.length(), (naux->f-1) * 2);
 		}
 
 
@@ -60,8 +58,9 @@ int main(){
 	Trie tr;
 	while(n--){
 		string str; cin >> str;
-		cout << tr.query(str) << "\n";
+		//cout << tr.query(str) << "\n";
 		tr.add(str);
+
 	}
 	return 0;
 }
