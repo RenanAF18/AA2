@@ -2,18 +2,14 @@
 using namespace std;
 typedef long long ll;
 typedef pair<ll,ll> pii;
-struct Node{
-	Node* conex[26];
-	ll f;
+struct Node {
+    Node* next[26];
+    ll min_len;
 
-	Node(): f(-1){
-		for(int i = 0; i < 26; i++)
-			conex[i] = nullptr;
-	}
-	Node(ll v): f(v){
-		for(int i = 0; i < 26; i++)
-			conex[i] = nullptr;
-	}
+    Node() : min_len(LLONG_MAX) {
+        for (int i = 0; i < 26; i++)
+            next[i] = nullptr;
+    }
 };
 struct Trie{
 	Node* root;
@@ -22,45 +18,45 @@ struct Trie{
 	
 	void add(string s){
 		Node* naux = root;
-		ll aux = s.length();
+		root->min_len = min(root->min_len, (ll)s.length());
 
-		for(auto c : s){
-			int id = c -'a';
-			if(naux->conex[id] == nullptr)
-			naux->conex[id] = new Node(aux);
-			naux = naux->conex[id];
-			aux--;
+		for (auto c : s){
+			int id = c - 'a';
+			if (!naux->next[id])
+				naux->next[id] = new Node();
+			naux = naux->next[id];
+			naux->min_len = min(naux->min_len, (ll)s.length());
 		}
 	}
 	ll query(string s){
-		ll aux = s.length();
 		Node* naux = root;
+		ll depth = 0;
+		ll ans = s.length();
 
-		for(auto c : s){
+		for (auto c : s){
 			int id = c - 'a';
-			if(naux->conex[id] == nullptr){
-				if(aux == s.length()) return aux;
-				if(aux == naux->f) return min((naux->f-1)*2, (ll)s.length());
-			}
-			naux = naux->conex[id];
-			aux--;
+			if (!naux->next[id]) break;
 
-			if(aux == 1 && naux->f != 1) return min((ll)s.length(), (naux->f-1) * 2);
+			naux = naux->next[id];
+			depth++;
+			ans = min(ans, (ll)s.length() + naux->min_len - 2 * depth);
 		}
-
-
-		return aux;
+		return ans;
 	}
 };
 int main(){
 	cin.tie(0)->sync_with_stdio(0);
 	int n; cin >> n;
+	int aux = n;
 	Trie tr;
-	while(n--){
+	for (int i = 0; i < n; i++) {
 		string str; cin >> str;
-		//cout << tr.query(str) << "\n";
+		if (i == 0) {
+			cout << str.length() << '\n';
+		} else {
+			cout << tr.query(str) << '\n';
+		}
 		tr.add(str);
-
 	}
 	return 0;
 }
