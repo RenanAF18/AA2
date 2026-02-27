@@ -4,51 +4,28 @@ using namespace std;
 typedef long long ll;
 typedef pair<ll,ll> pii;
 
-ll minLPS(string s, ll c){
-    vector<ll> lps = vector<ll>(s.size(), 0);
-    int len = 0;
-    int i = 1;
-    int resp = s.size();
-    int aux = 0;
-    
-    while(i < s.size()){
-        if(s[len] == s[i]){
-            len++;
-            i++;
-        }else{
-            if(len == 0){
-                lps[i] == 0;
-                i++;
-            }else{
-                len = lps[len-1];
-            }
-            aux = i+1;
-            if(s.size() % aux == 0){
-                resp = min(aux, resp);
-            }
-        }
-    }
-    return resp;
-}   
-
-
-void solve_tc(){
-    string s; cin  >> s;
-    set<char> aux;
-    for (int i = 0; i < s.size(); i++)
-        aux.insert(s[i]);
-
-    cout << minLPS(s, aux.size()) << "\n\n";
-}
-
 int main(){
 
     cin.tie(0)->sync_with_stdio(0);
+    ll n; cin >> n;
     
-    int tc;
-    cin >> tc;
+    vector<pii> v = vector<pii>(n);
+    for(int i = 0; i < n; i++)
+        cin >> v[i].first >> v[i].second;
 
-    while(tc--) solve_tc();
+    
+    pii minus = v[0];
+    for(auto p : v){
+        if(p.second < minus.second)
+            minus = p;
+        else if(p.second == minus.second && p.first < minus.first)
+            minus = p;
+    }
+
+    for(auto p : v){
+        p = {p.first - minus.first, p.second - minus.second};
+    }
+
     
     return 0;
 }
