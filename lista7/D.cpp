@@ -1,103 +1,76 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
-typedef pair<ll,ll> pii;
-
 struct Node{
-    char c;
+    bool end;
     Node* conex[3];
-    
-    Node(): c('0'){
-        for (int i = 0; i < 3; i++)
-            conex[i] = nullptr;
-    }
-    Node(char c): c(c){
-        for (int i = 0; i < 3; i++)
-            conex[i] = nullptr;
+
+    Node(): end(false){
+        for(int i=0;i<3;i++) conex[i] = nullptr;
     }
 };
-
 
 struct Trie{
     Node* root;
-    
-    Trie(): root(new Node()){};
 
-    void update(string str){
-        Node* aux = root;
-        for(char c: str){
-            if(aux->conex[c-'a'] == nullptr)
-                aux->conex[c-'a'] = new Node(c);
+    Trie(){ root = new Node(); }
 
-            aux = aux->conex[c-'a'];
-        }
-    }
-    string search2(string str, int v){
-        if (root->conex[(str[0] - 'a' + v) % 3] == nullptr) return "No";
-        Node* aux = root->conex[(str[0] - 'a' + v) % 3];
-
-        for(char c : str){
+    void update(const string& s){
+        Node* cur = root;
+        for(char c : s){
             int id = c - 'a';
-            if (aux->conex[id] == nullptr) return "No";
-            aux = aux->conex[id];
+            if(!cur->conex[id])
+                cur->conex[id] = new Node();
+            cur = cur->conex[id];
         }
-        return "Yes";
+        cur->end = true;
     }
 
-    string search(string str){
-        Node* aux = root;
-        int errado = 0;
-        string auxS = str;
+    bool dfs(Node* node, const string& s, int pos, bool used){
+        if(!node) return false;
 
-        string um = search2(auxS.erase(0,1),1);
-        auxS = str;
-        string dois = search2(auxS.erase(0,1),2);
-        if(um == "Yes") return um;
-        if(dois == "Yes") return dois;
+        if(pos == (int)s.size())
+            return node->end && used;
 
-        Node* a = nullptr;
-        Node* b = nullptr;
+        int id = s[pos] - 'a';
 
-        for(auto c : str){
-            int id = c - 'a';
-            
-            if (aux->conex[c - 'a'] == nullptr && a != nullptr && b != nullptr){
-                if(errado == 1) return "No";
-                if(aux->conex[(c - 'a' + 1) % 3] != nullptr)
-                    a =  aux->conex[(c - 'a' + 1) % 3];
-                if(aux->conex[(c - 'a' + 2) % 3] != nullptr)
-                    b = aux->conex[(c - 'a' + 1) % 3];
-                errado++;
-            }
-            if (aux->conex[c - 'a'] != nullptr) aux = aux->conex[c - 'a'];
-
-            if(a != nullptr){
-                
+        for(int i=0;i<3;i++){
+            if(node->conex[i]){
+                if(i == id){
+                    if(dfs(node->conex[i], s, pos+1, used))
+                        return true;
+                } else if(!used){
+                    if(dfs(node->conex[i], s, pos+1, true))
+                        return true;
+                }
             }
         }
-        return "Yes";
+        return false;
+    }
+
+    string search(const string& s){
+        return dfs(root, s, 0, false) ? "YES" : "NO";
     }
 };
 
-
-
-
 int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    cin.tie(0)->sync_with_stdio(0);
-    
     int n, q;
     cin >> n >> q;
+
     Trie tr;
 
     while(n--){
-        string str; cin >> str;
-        tr.update(str);
+        string s;
+        cin >> s;
+        tr.update(s);
     }
+
     while(q--){
-        string busca; cin >> busca;
-        cout << tr.search(busca) << '\n';
+        string s;
+        cin >> s;
+        cout << tr.search(s) << '\n';
     }
-    return 0;
 }
