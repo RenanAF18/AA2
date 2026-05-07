@@ -3,27 +3,34 @@ using namespace std;
 
 typedef long long ll;
 typedef pair<ll,ll> pii;
-typedef vector<ll,ll> lii;
+typedef vector<ll> vii;
 
 void solve_tc(){
+    ll a, h, n; cin >> a >> h >> n;
+    vector<ll> am(n), hm(n);
 
-    int a, h, n; cin >> a >> h >> n;
-    vector<int> ha(n), hm(n);
-
-    for(int i = 0; i < n; i++)
-        cin >> ha[i];
+    for(int i = 0; i < n; i++) cin >> am[i];
+    for(int i = 0; i < n; i++) cin >> hm[i];
     
-    for(int i = 0; i < n; i++)
-        cin >> hm[i];
-
-    bool vive = false
+    int last = 0;
+    ll max = 0;
     for(int i = 0; i < n; i++){
-        if(h <= 0) break;
-
-        
-
-
+        if(am[i] > max){
+            max = am[i];
+            last = i;
+        }
     }
+
+    for(int i = 0; i < n; i++){
+        if(i == last) continue;
+        ll k = (hm[i] + a - 1) / a;
+        h -= am[i] * k;
+        if(h <= 0){ cout << "NO\n"; return; }
+    }
+
+    ll k = (hm[last] + a - 1) / a;
+    h -= am[last] * k;
+    cout << (h > -am[last] ? "YES" : "NO") << "\n";
 
 }
 
